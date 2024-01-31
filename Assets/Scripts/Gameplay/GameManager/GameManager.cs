@@ -29,6 +29,7 @@ namespace Gameplay
         private void Start()
         {
             LoadLevel();
+            StartGame();
         }
 
         private void InitStateMachine() 
@@ -44,6 +45,11 @@ namespace Gameplay
         private void LoadLevel() 
         {
             _stateMachine.ChangeState(StateIds.LevelLoad);
+        }
+
+        private void StartGame() 
+        {
+            _stateMachine.ChangeState(StateIds.TapToStart);
         }
     }
 }

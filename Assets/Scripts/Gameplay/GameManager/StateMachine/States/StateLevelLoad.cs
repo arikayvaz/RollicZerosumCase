@@ -8,5 +8,12 @@ namespace Gameplay.GameManagerStateMachine
         public override StateIds StateId => StateIds.LevelLoad;
 
         public StateLevelLoad(GenericStateMachine<StateIds, StateInfo> stateMachine) : base(stateMachine) { }
+
+        public override void OnEnter(StateInfo info)
+        {
+            base.OnEnter(info);
+
+            PlayerController.Instance.InitPlayer();
+        }
     }
 }

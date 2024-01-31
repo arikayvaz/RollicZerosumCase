@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Common;
 using System.Security.Cryptography;
+using System;
 
 namespace Gameplay
 {
@@ -10,6 +11,9 @@ namespace Gameplay
 
         private bool _isTouchScreen;
         private float _startX;
+        private bool _isInputActive;
+
+        public Action OnStartScreenInputClicked;
 
         protected override void Awake()
         {
@@ -40,11 +44,28 @@ namespace Gameplay
         {
             TargetX = 0f;
             _startX = 0f;
+            _isInputActive = false;
         }
 
         private void HandleStartScreenInput() 
         {
+            if (_isTouchScreen)
+            {
+                if (Input.touchCount <= 0)
+                    return;
 
+                if (Input.touches[0].phase == TouchPhase.Began)
+                {
+                    OnStartScreenInputClicked?.Invoke();
+                }
+            }
+            else
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    OnStartScreenInputClicked?.Invoke();
+                }
+            }
         }
 
         private void HandleGameplayInput() 
@@ -98,24 +119,27 @@ namespace Gameplay
         private void OnInputStart(float x) 
         {
             _startX = x;
+            _isInputActive = true;
         }
 
         private void OnInputUpdate(float x) 
         {
+            if (!_isInputActive)
+                return;
+
             UpdateTargetX(x);
         }
 
         private void OnInputEnd() 
         {
-
+            _isInputActive = false;
         }
 
 
-        const float SCREEN_WORLD_MULT = 100f;
+        const float SCREEN_WORLD_MULT = 5f;
 
         private void UpdateTargetX(float x) 
         {
-            //TODO: Get Level Settings
             float roadHalfWidth = GameManager.GameSettings.roadHalfWidth;
 
             if (Mathf.Abs(x - _startX) > 0.01f)
