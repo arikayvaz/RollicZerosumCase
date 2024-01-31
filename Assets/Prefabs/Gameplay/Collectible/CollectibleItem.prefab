@@ -88,11 +88,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6574709263062495857}
+  - component: {fileID: 759209689212574753}
   - component: {fileID: 2196133037149033510}
   - component: {fileID: 3563962428639505318}
   m_Layer: 10
   m_Name: CollectibleItem
-  m_TagString: Untagged
+  m_TagString: CollectibleItem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -112,6 +113,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &759209689212574753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6740117986459513535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac739e09f6d5754419e139c3de929fad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderer: {fileID: 9048738963043758529}
 --- !u!135 &2196133037149033510
 SphereCollider:
   m_ObjectHideFlags: 0

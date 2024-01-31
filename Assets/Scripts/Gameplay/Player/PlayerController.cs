@@ -6,15 +6,31 @@ using Gameplay;
 public class PlayerController : Singleton<PlayerController>
 {
     [SerializeField] StateInfo _stateInfo = new StateInfo();
+    [SerializeField] PlayerCollectionController _collectionController = null;
 
     private StateMachine _stateMachine;
     private StateFactory _stateFactory;
+
+    public bool CanCheckCollection => _stateMachine?.State?.StateId == StateIds.Move;
 
     protected override void Awake()
     {
         base.Awake();
 
         InitStateMachine();
+        _collectionController.InitController();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (CanCheckCollection)
+            _collectionController.HandleTriggerEnter(other.gameObject);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (CanCheckCollection)
+            _collectionController.HandleTriggerExit(other.gameObject);
     }
 
     private void InitStateMachine()

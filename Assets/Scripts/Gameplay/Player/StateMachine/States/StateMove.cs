@@ -42,8 +42,6 @@ namespace Gameplay.PlayerStateMachine
 
         private void HandleMovement(StateInfo info) 
         {
-            Debug.Log(InputManager.Instance.TargetX);
-
             float inputX = InputManager.Instance.TargetX;
             float adjustedX = Mathf.Clamp(inputX, -moveXLimit, moveXLimit);
 
