@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00834fba0c77903469752be5b60c9715, type: 3}
+  m_Script: {fileID: 11500000, guid: 97dc6e53fed8d5345897098e7f0dbf05, type: 3}
   m_Name: Level_0000
   m_EditorClassIdentifier: 
-  modelString: '{"p":"{\"i\":\"[{\\\"z\\\":0.0},{\\\"z\\\":20.0},{\\\"z\\\":40.0},{\\\"z\\\":60.0},{\\\"z\\\":80.0}]\"}"}'
-  dataModel:
-    platformLevelDataModelJson: 
+  modelJson: '{"p":"{\"i\":\"[{\\\"z\\\":0.0},{\\\"z\\\":20.0},{\\\"z\\\":40.0},{\\\"z\\\":60.0},{\\\"z\\\":80.0}]\"}","gp":""}'
+  saveModel:
+    platformSaveModelJson: 
+    gatePointSaveModelJson: 

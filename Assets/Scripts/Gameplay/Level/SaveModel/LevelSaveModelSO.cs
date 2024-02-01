@@ -3,10 +3,10 @@
 namespace Gameplay
 {
     [CreateAssetMenu(fileName = LevelManager.LEVEL_FILE_NAME, menuName = "Project/Gameplay/Level/New Level File")]
-    public class LevelDataSO : ScriptableObject
+    public class LevelSaveModelSO : ScriptableObject
     {
-        public string modelString = "";
+        public string modelJson = "";
         //[System.NonSerialized]
-        public LevelDataModel dataModel;
+        public LevelSaveModel saveModel;
     }
 }

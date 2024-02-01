@@ -63,24 +63,7 @@ namespace Gameplay
 
         private void LoadLevel() 
         {
-            LevelManager levelManager = FindObjectOfType<LevelManager>();
-
-            if (levelManager == null)
-                return;
-
-            LevelDataModel levelDataModel = levelManager.GetLevelDataModelFromResources(designer.levelNo);
-
-            if (levelDataModel == null)
-            {
-                Debug.LogError("Level is not exist!");
-                return;
-            }
-
-            levelManager.levelDataModel = levelDataModel;
-
-            levelManager.InitializeLevelInfos();
-
-            levelManager.PlatformController.OnLevelLoad(levelDataModel.platformLevelDataModel);
+            LevelMngr.LoadLevel(designer.levelNo);
         }
 
         private void CreateLevel() 
@@ -88,7 +71,7 @@ namespace Gameplay
             if (LevelMngr == null)
                 return;
 
-            LevelDataModel levelData = LevelMngr.GetLevelDataModelFromResources(designer.levelNo, true);
+            LevelSaveModel levelData = LevelMngr.GetLevelSaveModelFromResources(designer.levelNo, true);
 
             if (levelData != null)
             {
@@ -96,13 +79,13 @@ namespace Gameplay
                 return;
             }
 
-            LevelDataSO levelDataSO = CreateInstance<LevelDataSO>();
-            levelDataSO.dataModel = new LevelDataModel();
-            levelDataSO.modelString = JsonConvert.SerializeObject(levelDataSO.dataModel
+            LevelSaveModelSO levelDataSO = CreateInstance<LevelSaveModelSO>();
+            levelDataSO.saveModel = new LevelSaveModel();
+            levelDataSO.modelJson = JsonConvert.SerializeObject(levelDataSO.saveModel
                 , Formatting.None
                 , new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore});
 
-            AssetDatabase.CreateAsset(levelDataSO, LevelMngr.GetLevelDataSOFileName(designer.levelNo));
+            AssetDatabase.CreateAsset(levelDataSO, LevelMngr.GetLevelSaveSOFileName(designer.levelNo));
             AssetDatabase.SaveAssets();
 
             EditorUtility.SetDirty(designer);
@@ -139,13 +122,13 @@ namespace Gameplay
             //AssetDatabase.CreateAsset(levelData, LevelMngr.GetLevelDataSOFileName(designer.levelNo));
             //AssetDatabase.SaveAssets();
 
-            LevelDataSO levelDataSO = CreateInstance<LevelDataSO>();
+            LevelSaveModelSO levelDataSO = CreateInstance<LevelSaveModelSO>();
 
-            string modelJson = LevelMngr.SetChangesToDataModel();
+            string modelJson = LevelMngr.SetChangesAndGetSaveModelJson();
 
-            levelDataSO.modelString = modelJson;
+            levelDataSO.modelJson = modelJson;
 
-            AssetDatabase.CreateAsset(levelDataSO, LevelMngr.GetLevelDataSOFileName(designer.levelNo));
+            AssetDatabase.CreateAsset(levelDataSO, LevelMngr.GetLevelSaveSOFileName(designer.levelNo));
             AssetDatabase.SaveAssets();
 
             if (unloadLevel)

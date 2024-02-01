@@ -7,17 +7,17 @@ using UnityEngine;
 
 namespace Gameplay
 {
-    public class LevelPlatformController : MonoBehaviour
+    public class LevelPlatformController : MonoBehaviour, ILevelController<PlatformLevelSaveModel>
     {
         [SerializeField] Pooler pooler;
 
         List<GameObject> platforms = null;
 
-        public void OnLevelLoad(PlatformLevelDataModel dataModel) 
+        public void OnLevelLoad(PlatformLevelSaveModel saveModel) 
         {
             platforms = new List<GameObject>();
 
-            SpawnPlatforms(dataModel.GetLevelInfos());
+            SpawnPlatforms(saveModel.GetLevelInfos());
         }
 
         public void UnloadLevel() 

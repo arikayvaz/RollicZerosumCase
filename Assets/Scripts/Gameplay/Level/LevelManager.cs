@@ -28,7 +28,12 @@ namespace Gameplay
         [SerializeField] LevelPlatformController platformController = null;
         public LevelPlatformController PlatformController => platformController;
 
-        public LevelDataModel levelDataModel = null;
+        [SerializeField] LevelGatePointController gatePointController = null;
+        public LevelGatePointController GatePointController => gatePointController;
+
+        //public LevelSaveModel levelDataModel = null;
+
+        public LevelSaveModel CurrentSaveModel { get; private set; } = null;
 
         public static void SetEditorInstance(LevelManager instance)
         {
@@ -38,11 +43,27 @@ namespace Gameplay
             Instance = instance;
         }
 
-        public LevelDataModel GetLevelDataModelFromResources(int levelNo, bool isCreateLevelCheck = false) 
+        public void LoadLevel(int levelNo) 
         {
-            LevelDataSO levelData = (LevelDataSO)Resources.Load(GetLevelDataPath(levelNo));
+            CurrentSaveModel = GetLevelSaveModelFromResources(levelNo);
 
-            if (levelData == null)
+            if (CurrentSaveModel == null)
+            {
+                Debug.LogError("Level is not exist!");
+                return;
+            }
+
+            InitializeLevelInfos();
+
+            platformController.OnLevelLoad(CurrentSaveModel.platformSaveModel);
+            gatePointController.OnLevelLoad(CurrentSaveModel.gatePointSaveModel);
+        }
+
+        public LevelSaveModel GetLevelSaveModelFromResources(int levelNo, bool isCreateLevelCheck = false) 
+        {
+            LevelSaveModelSO saveModelSO = (LevelSaveModelSO)Resources.Load(GetLevelDataPath(levelNo));
+
+            if (saveModelSO == null)
             {
                 if (!isCreateLevelCheck)
                     Debug.LogError("Level resource is missing for level: " + levelNo);
@@ -50,18 +71,18 @@ namespace Gameplay
                 return null;
             }
 
-            levelData = Instantiate(levelData);
-            levelData.dataModel = JsonConvert.DeserializeObject<LevelDataModel>(levelData.modelString);
+            saveModelSO = Instantiate(saveModelSO);
+            saveModelSO.saveModel = JsonConvert.DeserializeObject<LevelSaveModel>(saveModelSO.modelJson);
 
-            return levelData.dataModel;
+            return saveModelSO.saveModel;
         }
 
-        public string SetChangesToDataModel() 
+        public string SetChangesAndGetSaveModelJson() 
         {
-            levelDataModel.platformLevelDataModel.platformInfosJson = LevelDesigner.Instance.GetPlatformInfoJsonFromScene();
-            levelDataModel.platformLevelDataModelJson = JsonConvert.SerializeObject(levelDataModel.platformLevelDataModel);
+            CurrentSaveModel.platformSaveModel.infosJson = LevelDesigner.Instance.GetPlatformInfoJsonFromScene();
+            CurrentSaveModel.platformSaveModelJson = JsonConvert.SerializeObject(CurrentSaveModel.platformSaveModel);
 
-            string modelString = JsonConvert.SerializeObject(levelDataModel
+            string modelString = JsonConvert.SerializeObject(CurrentSaveModel
                 , Formatting.None
                 , new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
@@ -70,16 +91,24 @@ namespace Gameplay
 
         public void InitializeLevelInfos() 
         {
-            if (levelDataModel.platformLevelDataModelJson == null)
-                levelDataModel.platformLevelDataModelJson = "";
+            if (CurrentSaveModel.platformSaveModelJson == null)
+                CurrentSaveModel.platformSaveModelJson = "";
 
-            levelDataModel.platformLevelDataModel = JsonConvert.DeserializeObject<PlatformLevelDataModel>(levelDataModel.platformLevelDataModelJson);
+            CurrentSaveModel.platformSaveModel = JsonConvert.DeserializeObject<PlatformLevelSaveModel>(CurrentSaveModel.platformSaveModelJson);
 
-            if (levelDataModel.platformLevelDataModel == null)
-                levelDataModel.platformLevelDataModel = new PlatformLevelDataModel();
+            if (CurrentSaveModel.platformSaveModel == null)
+                CurrentSaveModel.platformSaveModel = new PlatformLevelSaveModel();
+
+            if (CurrentSaveModel.gatePointSaveModelJson == null)
+                CurrentSaveModel.gatePointSaveModelJson = "";
+
+            CurrentSaveModel.gatePointSaveModel = JsonConvert.DeserializeObject<GatePointLevelSaveModel>(CurrentSaveModel.gatePointSaveModelJson);
+
+            if (CurrentSaveModel.gatePointSaveModel == null)
+                CurrentSaveModel.gatePointSaveModel = new GatePointLevelSaveModel();
         }
 
-        public string GetLevelDataSOFileName(int levelNo) 
+        public string GetLevelSaveSOFileName(int levelNo) 
         {
             return LEVEL_FILE_ROOTH_PATH + GetLevelDataPath(levelNo) + ".asset";
         }
