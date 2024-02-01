@@ -4,7 +4,7 @@ namespace Common
 
     public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
-        public static T Instance { get; private set; } = null;
+        public static T Instance { get; protected set; } = null;
 
         protected virtual void Awake()
         {
