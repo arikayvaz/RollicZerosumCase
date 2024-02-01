@@ -6,31 +6,35 @@ using Gameplay;
 public class PlayerController : Singleton<PlayerController>
 {
     [SerializeField] StateInfo _stateInfo = new StateInfo();
-    [SerializeField] PlayerCollectionController _collectionController = null;
 
     private StateMachine _stateMachine;
     private StateFactory _stateFactory;
 
     public bool CanCheckCollection => _stateMachine?.State?.StateId == StateIds.Move;
+    public bool CanEnterGatePoint => _stateMachine?.State?.StateId == StateIds.Move;
 
     protected override void Awake()
     {
         base.Awake();
 
         InitStateMachine();
-        _collectionController.InitController();
+        _stateInfo.collectionController.InitController();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (CanCheckCollection)
-            _collectionController.HandleTriggerEnter(other.gameObject);
+            _stateInfo.collectionController.HandleTriggerEnter(other.gameObject);
+
+        if (CanEnterGatePoint)
+            HandleGatePoint(other.gameObject);
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (CanCheckCollection)
-            _collectionController.HandleTriggerExit(other.gameObject);
+            _stateInfo.collectionController.HandleTriggerExit(other.gameObject);
+
     }
 
     private void InitStateMachine()
@@ -51,5 +55,16 @@ public class PlayerController : Singleton<PlayerController>
     public void StartMoving() 
     {
         _stateMachine.ChangeState(StateIds.Move);
+    }
+
+    private void HandleGatePoint(GameObject goCollided) 
+    {
+        GatePointController gatePoint = goCollided.gameObject.GetComponent<GatePointController>();
+
+        if (gatePoint == null)
+            return;
+
+        _stateInfo.currentGatePoint = gatePoint;
+        _stateMachine.ChangeState(StateIds.GatePointEnter);
     }
 }

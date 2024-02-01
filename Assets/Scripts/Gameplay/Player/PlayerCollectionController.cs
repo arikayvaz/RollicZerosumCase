@@ -7,6 +7,8 @@ namespace Gameplay
     {
         private List<CollectibleItem> collectedItems = null;
 
+        public bool HasAnyCollectible => collectedItems?.Count > 0;
+
         public void InitController() 
         {
             collectedItems = new List<CollectibleItem>();
@@ -55,6 +57,13 @@ namespace Gameplay
             collectedItems.Remove(item);
             item.OnRemoved();
             Debug.Log("Removed Item");
+        }
+
+        public void PushCollectibles() 
+        {
+            foreach (CollectibleItem item in collectedItems)
+                item.Push();
+
         }
     }
 }

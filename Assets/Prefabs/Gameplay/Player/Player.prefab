@@ -96,8 +96,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _stateInfo:
     _playerSettings: {fileID: 11400000, guid: 1037977247794c64ca4dc29228da4812, type: 2}
+    collectionController: {fileID: 2476499476803295327}
     rb: {fileID: 3806952015161182139}
-  _collectionController: {fileID: 2476499476803295327}
+    currentGatePoint: {fileID: 0}
 --- !u!114 &2476499476803295327
 MonoBehaviour:
   m_ObjectHideFlags: 0

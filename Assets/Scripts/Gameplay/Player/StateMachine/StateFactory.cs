@@ -15,6 +15,8 @@ namespace Gameplay.PlayerStateMachine
                     return new StateIdle(stateMachine);
                 case StateIds.Move:
                     return new StateMove(stateMachine);
+                case StateIds.GatePointEnter:
+                    return new StateGatePointEnter(stateMachine);
                 default:
                     return null;
             }
