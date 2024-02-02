@@ -1,6 +1,7 @@
 ﻿using Boo.Lang;
 using Common;
 using Newtonsoft.Json;
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -27,14 +28,21 @@ namespace Gameplay
 #endif
 
         [SerializeField] Transform trPlatformIndicator = null;
+        [SerializeField] Transform trCollectibleIndicator = null;
 
         [HideInInspector] public int levelNo = 0;
         [HideInInspector] public int gatePointTargetValue = 0;
+        [HideInInspector] public CollectibleItemTypes collectibleItemType = CollectibleItemTypes.None;
+        [HideInInspector] public int collectibleAddCount = 0;
+        [HideInInspector] public int collectibleDeleteCount = 0;
 
         public float LastPlatformZ { get; private set; } = 0f;
 
+        //TODO: Get values from game settings
         public const float PLATFORM_LENGTH = 20f;
         public const float GATE_POINT_LENGTH = 8f;
+        public const float COLLECTIBLE_ITEM_SIZE = 0.3f;
+        public const float COLLECTIBLE_ITEM_GAP = 0.4f;
 
         public static void SetEditorInstance(LevelDesigner instance) 
         {
@@ -86,6 +94,25 @@ namespace Gameplay
             return json == null ? "" : json;
         }
 
+        public string GetCollectibleItemInfoJsonFromScene() 
+        {
+            CollectibleItem[] items = GetCollectibleItems();
+
+            if (items == null || items.Length < 1)
+                return "";
+
+            CollectibleItemLevelInfoModel[] infos = new CollectibleItemLevelInfoModel[items.Length];
+
+            for (int i = 0; i < infos.Length; i++)
+            {
+                infos[i] = items[i].GetInfoModel();
+            }
+
+            string json = JsonConvert.SerializeObject(infos);
+
+            return json == null ? "" : json;
+        }
+
         public void CalculateLastPlatformPosition() 
         {
             GameObject[] platforms = GetLevelPlatforms();
@@ -117,6 +144,24 @@ namespace Gameplay
             UpdateLastPlatformPosition(isLastObjectPlatform ? PLATFORM_LENGTH : GATE_POINT_LENGTH);
         }
 
+        public void CalculateLastCollectiblePosition() 
+        {
+            GameObject[] goItems = GetLevelCollectibleItemGameObjects();
+
+            if (goItems == null || goItems.Length < 1) 
+            {
+                SetCollectibItemIndicatorPosition(Vector3.zero);
+                return;
+            }
+
+            goItems = goItems.OrderBy(x => x.transform.position.z).ToArray();
+
+            Vector3 pos = goItems[goItems.Length - 1].transform.position;
+            pos.z += COLLECTIBLE_ITEM_SIZE * 2f + COLLECTIBLE_ITEM_GAP;
+
+            SetCollectibItemIndicatorPosition(pos);
+        }
+
         public void UpdateLastPlatformPosition(float delta) 
         {
             LastPlatformZ += delta;
@@ -127,10 +172,27 @@ namespace Gameplay
             trPlatformIndicator.transform.position = new Vector3(0f, 0f, LastPlatformZ);
         }
 
-        public void ResetPlatformPositionIndicator() 
+        public void ResetPlatformIndicatorPosition() 
         {
             LastPlatformZ = 0f;
             UpdatePlatformIndicatorPosition();
+        }
+
+        public void SetCollectibItemIndicatorPosition(Vector3 position) 
+        {
+            trCollectibleIndicator.position = position;
+        }
+
+        public void UpdateCollectibleIndicatorPosition() 
+        {
+            trCollectibleIndicator.position = LevelManager.Instance.GetNextCollectibleItemPosition();
+        }
+
+        public Vector3 GetCollectibleIndicatorPosition() => trCollectibleIndicator.position;
+
+        public void ResetCollectibleItemIndicatorPosition() 
+        {
+            trCollectibleIndicator.position = Vector3.zero;
         }
 
         private GameObject[] GetLevelPlatforms() 
@@ -158,6 +220,28 @@ namespace Gameplay
             }
 
             return goGatePoints;
+        }
+
+        private CollectibleItem[] GetCollectibleItems()
+        {
+            return FindObjectsOfType<CollectibleItem>();
+        }
+
+        private GameObject[] GetLevelCollectibleItemGameObjects() 
+        {
+            CollectibleItem[] items = GetCollectibleItems();
+
+            if (items == null || items.Length < 1)
+                return null;
+
+            GameObject[] goCollectibleItems = new GameObject[items.Length];
+
+            for (int i = 0; i < goCollectibleItems.Length; i++)
+            {
+                goCollectibleItems[i] = items[i].gameObject;
+            }
+
+            return goCollectibleItems;
         }
 
     }

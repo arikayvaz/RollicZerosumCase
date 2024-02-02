@@ -41,6 +41,10 @@ namespace Gameplay
 
             EditorGUILayout.Space(10f);
 
+            DrawCollectibleItem();
+
+            EditorGUILayout.Space(10f);
+
             DrawSaveAndUnload();
 
             EditorGUILayout.Space(10f);
@@ -79,6 +83,8 @@ namespace Gameplay
 
             designer.CalculateLastPlatformPosition();
             designer.UpdatePlatformIndicatorPosition();
+            //designer.UpdateCollectibleIndicatorPosition();
+            designer.CalculateLastCollectiblePosition();
         }
 
         private void CreateLevel() 
@@ -149,7 +155,8 @@ namespace Gameplay
         {
             LevelMngr.UnloadLevel();
 
-            designer.ResetPlatformPositionIndicator();
+            designer.ResetPlatformIndicatorPosition();
+            designer.ResetCollectibleItemIndicatorPosition();
         }
 
         #region Platform
@@ -247,6 +254,102 @@ namespace Gameplay
 
             designer.UpdateLastPlatformPosition(-LevelDesigner.GATE_POINT_LENGTH);
             designer.UpdatePlatformIndicatorPosition();
+        }
+
+        #endregion
+
+        #region CollectibleItem
+
+        private void DrawCollectibleItem() 
+        {
+            if (!LevelDesigner.IsDesignMode)
+                return;
+
+            GUILayout.Label("Collectible Item");
+
+            EditorGUILayout.Space(5f);
+
+            CollectibleItemTypes itemType = (CollectibleItemTypes) EditorGUILayout.EnumPopup("Collectible Type:", designer.collectibleItemType);
+
+            if (designer.collectibleItemType != itemType)
+            {
+                designer.collectibleItemType = itemType;
+                EditorUtility.SetDirty(designer);
+            }
+
+            int addCount = EditorGUILayout.IntField("Add Count:", designer.collectibleAddCount);
+
+            if (designer.collectibleAddCount != addCount)
+            {
+                designer.collectibleAddCount = addCount;
+                EditorUtility.SetDirty(designer);
+            }
+
+            int deleteCount = EditorGUILayout.IntField("Add Count:", designer.collectibleDeleteCount);
+
+            if (designer.collectibleDeleteCount != deleteCount)
+            {
+                designer.collectibleDeleteCount = deleteCount;
+                EditorUtility.SetDirty(designer);
+            }
+
+            if (GUILayout.Button("Add Single"))
+            {
+                AddSingleCollectible();
+                return;
+            }
+
+            if (GUILayout.Button("Add Multiple"))
+            {
+                AddMultipleCollectible(addCount);
+                return;
+            }
+
+            if (GUILayout.Button("Delete Single"))
+            {
+                DeleteSingleCollectible();
+                return;
+            }
+
+            if (GUILayout.Button("Delete Multiple"))
+            {
+                DeleteMultipleCollectible(deleteCount);
+                return;
+            }
+        }
+
+        private void AddSingleCollectible() 
+        {
+            CollectibleItemLevelInfoModel infoModel = new CollectibleItemLevelInfoModel();
+
+            infoModel.type = designer.collectibleItemType;
+
+            Vector3 pos = designer.GetCollectibleIndicatorPosition();
+            infoModel.x = pos.x;
+            infoModel.z = pos.z;
+
+            LevelMngr.AddCollectibleItem(infoModel);
+
+            designer.UpdateCollectibleIndicatorPosition();
+        }
+
+        private void AddMultipleCollectible(int count) 
+        {
+            for (int i = 0; i < count; i++)
+                AddSingleCollectible();
+        }
+
+        private void DeleteSingleCollectible() 
+        {
+            LevelMngr.RemoveCollectibleItem();
+
+            designer.UpdateCollectibleIndicatorPosition();
+        }
+
+        private void DeleteMultipleCollectible(int count) 
+        {
+            for (int i = 0; i < count; i++)
+                DeleteSingleCollectible();
         }
 
         #endregion

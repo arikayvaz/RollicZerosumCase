@@ -27,12 +27,12 @@ namespace Gameplay
         private int totalLevelCount = 0;
 
         [SerializeField] LevelPlatformController platformController = null;
-
         [SerializeField] LevelGatePointController gatePointController = null;
-
-        //public LevelSaveModel levelDataModel = null;
+        [SerializeField] LevelCollectibleItemController collectibleItemController = null;
 
         public LevelSaveModel CurrentSaveModel { get; private set; } = null;
+
+        public bool HasAnyCollectibleInLevel => collectibleItemController.HasAnyCollectible;
 
         public static void SetEditorInstance(LevelManager instance)
         {
@@ -56,12 +56,14 @@ namespace Gameplay
 
             platformController.OnLevelLoad(CurrentSaveModel.platformSaveModel);
             gatePointController.OnLevelLoad(CurrentSaveModel.gatePointSaveModel);
+            collectibleItemController.OnLevelLoad(CurrentSaveModel.collectibleItemSaveModel);
         }
 
         public void UnloadLevel() 
         {
             platformController.UnloadLevel();
             gatePointController.UnloadLevel();
+            collectibleItemController.UnloadLevel();
         }
 
         public LevelSaveModel GetLevelSaveModelFromResources(int levelNo, bool isCreateLevelCheck = false) 
@@ -92,6 +94,10 @@ namespace Gameplay
             CurrentSaveModel.gatePointSaveModel.infosJson = LevelDesigner.Instance.GetGatePointInfoJsonFromScene();
             CurrentSaveModel.gatePointSaveModelJson = JsonConvert.SerializeObject(CurrentSaveModel.gatePointSaveModel);
 
+            //Collectible items
+            CurrentSaveModel.collectibleItemSaveModel.infosJson = LevelDesigner.Instance.GetCollectibleItemInfoJsonFromScene();
+            CurrentSaveModel.collectibleItemSaveModelJson = JsonConvert.SerializeObject(CurrentSaveModel.collectibleItemSaveModel);
+
             string modelString = JsonConvert.SerializeObject(CurrentSaveModel
                 , Formatting.None
                 , new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
@@ -116,6 +122,14 @@ namespace Gameplay
 
             if (CurrentSaveModel.gatePointSaveModel == null)
                 CurrentSaveModel.gatePointSaveModel = new GatePointLevelSaveModel();
+
+            if (CurrentSaveModel.collectibleItemSaveModelJson == null)
+                CurrentSaveModel.collectibleItemSaveModelJson = "";
+
+            CurrentSaveModel.collectibleItemSaveModel = JsonConvert.DeserializeObject<CollectibleItemLevelSaveModel>(CurrentSaveModel.collectibleItemSaveModelJson);
+
+            if (CurrentSaveModel.collectibleItemSaveModel == null)
+                CurrentSaveModel.collectibleItemSaveModel = new CollectibleItemLevelSaveModel();
         }
 
         public string GetLevelSaveSOFileName(int levelNo) 
@@ -147,6 +161,25 @@ namespace Gameplay
         public void RemoveLastGatePoint() 
         {
             gatePointController.RemoveLastItem();
+        }
+
+        #endregion
+
+        #region CollectibleItem
+
+        public void AddCollectibleItem(CollectibleItemLevelInfoModel infoModel) 
+        {
+            collectibleItemController.AddItem(infoModel);
+        }
+
+        public void RemoveCollectibleItem() 
+        {
+            collectibleItemController.RemoveLastItem();
+        }
+
+        public Vector3 GetNextCollectibleItemPosition() 
+        {
+            return collectibleItemController.GetNextCollectibleItemPosition();
         }
 
         #endregion

@@ -6,7 +6,7 @@ namespace Gameplay
     public class LevelSaveModelSO : ScriptableObject
     {
         public string modelJson = "";
-        //[System.NonSerialized]
+        [System.NonSerialized]
         public LevelSaveModel saveModel;
     }
 }

@@ -8,10 +8,14 @@ namespace Gameplay
     {
         [JsonProperty("p")]
         public string platformSaveModelJson = null;
-        public PlatformLevelSaveModel platformSaveModel = null;
+        [System.NonSerialized] public PlatformLevelSaveModel platformSaveModel = null;
 
-        [JsonProperty("gp")]
+        [JsonProperty("g")]
         public string gatePointSaveModelJson = null;
-        public GatePointLevelSaveModel gatePointSaveModel = null;
+        [System.NonSerialized] public GatePointLevelSaveModel gatePointSaveModel = null;
+
+        [JsonProperty("c")]
+        public string collectibleItemSaveModelJson = null;
+        [System.NonSerialized] public CollectibleItemLevelSaveModel collectibleItemSaveModel = null;
     }
 }

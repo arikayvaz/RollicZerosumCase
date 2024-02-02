@@ -7,6 +7,13 @@ namespace Gameplay
         [SerializeField] MeshRenderer renderer = null;
         [SerializeField] Rigidbody _rb = null;
 
+        [SerializeField] CollectibleItemTypes itemType = CollectibleItemTypes.None;
+
+        public CollectibleItemLevelInfoModel GetInfoModel() 
+        {
+            return new CollectibleItemLevelInfoModel(itemType, transform.position.x, transform.position.z);
+        }
+
         public void OnAdded() 
         {
             Material mat = renderer.material;
