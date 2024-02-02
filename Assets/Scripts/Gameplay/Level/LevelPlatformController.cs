@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Gameplay
 {
-    public class LevelPlatformController : MonoBehaviour, ILevelController<PlatformLevelSaveModel>
+    public class LevelPlatformController : MonoBehaviour, ILevelController<PlatformLevelSaveModel, PlatformLevelInfoModel>
     {
         [SerializeField] Pooler pooler;
 
@@ -17,7 +17,7 @@ namespace Gameplay
         {
             platforms = new List<GameObject>();
 
-            SpawnPlatforms(saveModel.GetLevelInfos());
+            SpawnItems(saveModel.GetLevelInfos());
         }
 
         public void UnloadLevel() 
@@ -33,21 +33,32 @@ namespace Gameplay
             platforms = null;
         }
 
-        public void SpawnPlatforms(PlatformLevelInfoModel[] levelInfos) 
+        public void SpawnItems(PlatformLevelInfoModel[] levelInfos) 
         {
             if (levelInfos == null || levelInfos.Length < 1)
                 return;
 
             foreach (PlatformLevelInfoModel info in levelInfos)
             {
-                AddPlatform(info);
+                AddItem(info);
             }
         }
 
-        public void AddPlatform(PlatformLevelInfoModel infoModel) 
+        public void AddItem(PlatformLevelInfoModel infoModel) 
         {
             GameObject platform = SpawnPlatform(infoModel.Position);
             platforms.Add(platform);
+        }
+
+        public void RemoveLastItem() 
+        {
+            if (Application.isPlaying || platforms?.Count < 1)
+                return;
+
+            GameObject goLastPlatform = platforms[platforms.Count - 1];
+
+            platforms.Remove(goLastPlatform);
+            DestroyImmediate(goLastPlatform);
         }
 
         private GameObject SpawnPlatform(Vector3 position) 

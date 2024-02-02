@@ -25,6 +25,11 @@ namespace Gameplay
 
         private List<CollectibleItem> collectedItems = new List<CollectibleItem>();
 
+        public void InitController(int targetValue) 
+        {
+            targetRegisterCount = targetValue;
+        }
+
         private void Awake()
         {
             goPlatform.SetActive(false);
@@ -43,6 +48,11 @@ namespace Gameplay
             _canRegisterItems = true;
 
             StartCoroutine(StartGateSequence());
+        }
+
+        public GatePointLevelInfoModel GetLevelInfoModel() 
+        {
+            return new GatePointLevelInfoModel(transform.position.z, targetRegisterCount);
         }
 
         const float WAIT_TIME = 3f;

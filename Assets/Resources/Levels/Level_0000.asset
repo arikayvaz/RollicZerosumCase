@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97dc6e53fed8d5345897098e7f0dbf05, type: 3}
   m_Name: Level_0000
   m_EditorClassIdentifier: 
-  modelJson: '{"p":"{\"i\":\"[{\\\"z\\\":0.0},{\\\"z\\\":20.0},{\\\"z\\\":40.0},{\\\"z\\\":60.0},{\\\"z\\\":80.0}]\"}","gp":""}'
+  modelJson: '{"p":"{\"i\":\"[{\\\"z\\\":0.0},{\\\"z\\\":20.0},{\\\"z\\\":40.0},{\\\"z\\\":68.0},{\\\"z\\\":88.0}]\"}","gp":"{\"i\":\"[{\\\"z\\\":60.0,\\\"v\\\":10}]\"}"}'
   saveModel:
     platformSaveModelJson: 
     gatePointSaveModelJson: 

@@ -30,8 +30,20 @@ namespace Gameplay
         public override void OnInspectorGUI()
         {
             DrawCreateAndLoad();
+
+            EditorGUILayout.Space(10f);
+
             DrawPlatform();
+
+            EditorGUILayout.Space(10f);
+
+            DrawGatePoint();
+
+            EditorGUILayout.Space(10f);
+
             DrawSaveAndUnload();
+
+            EditorGUILayout.Space(10f);
 
             DrawDefaultInspector();
         }
@@ -64,6 +76,9 @@ namespace Gameplay
         private void LoadLevel() 
         {
             LevelMngr.LoadLevel(designer.levelNo);
+
+            designer.CalculateLastPlatformPosition();
+            designer.UpdatePlatformIndicatorPosition();
         }
 
         private void CreateLevel() 
@@ -116,12 +131,6 @@ namespace Gameplay
         {
             AssetDatabase.Refresh();
 
-            //LevelMngr.SetChangesToDataModel();
-            //LevelDataSO levelData =  LevelMngr.SetChangesToLevelDataSO(designer.levelNo);
-
-            //AssetDatabase.CreateAsset(levelData, LevelMngr.GetLevelDataSOFileName(designer.levelNo));
-            //AssetDatabase.SaveAssets();
-
             LevelSaveModelSO levelDataSO = CreateInstance<LevelSaveModelSO>();
 
             string modelJson = LevelMngr.SetChangesAndGetSaveModelJson();
@@ -138,32 +147,108 @@ namespace Gameplay
 
         private void UnloadLevel() 
         {
-            LevelMngr.PlatformController.UnloadLevel();
+            LevelMngr.UnloadLevel();
 
-            designer.lastPlatformZ = 0f;
+            designer.ResetPlatformPositionIndicator();
         }
+
+        #region Platform
 
         private void DrawPlatform() 
         {
             if (!LevelDesigner.IsDesignMode)
                 return;
 
+            GUILayout.Label("Platform");
+
+            EditorGUILayout.Space(5f);
+
             if (GUILayout.Button("Add Platform")) 
             {
                 AddPlatform();
+                return;
+            }
+
+            if (GUILayout.Button("Delete Last Platform"))
+            {
+                DeleteLastPlatform();
+                return;
             }
         }
 
         private void AddPlatform() 
         {
-            const float PLATFORM_LENGTH = 20f;
-
             PlatformLevelInfoModel infoModel = new PlatformLevelInfoModel();
-            infoModel.z = designer.lastPlatformZ;
+            infoModel.z = designer.LastPlatformZ;
 
-            LevelMngr.PlatformController.AddPlatform(infoModel);
+            LevelMngr.AddPlatform(infoModel);
 
-            designer.lastPlatformZ += PLATFORM_LENGTH;
+            designer.UpdateLastPlatformPosition(LevelDesigner.PLATFORM_LENGTH);
+            designer.UpdatePlatformIndicatorPosition();
         }
+
+        private void DeleteLastPlatform() 
+        {
+            LevelMngr.RemoveLastPlatform();
+
+            designer.UpdateLastPlatformPosition(-LevelDesigner.PLATFORM_LENGTH);
+            designer.UpdatePlatformIndicatorPosition();
+        }
+
+        #endregion
+
+        #region Gate Point
+
+        private void DrawGatePoint() 
+        {
+            if (!LevelDesigner.IsDesignMode)
+                return;
+
+            GUILayout.Label("Platform");
+
+            EditorGUILayout.Space(5f);
+
+            int targetValue = EditorGUILayout.IntField("Target Value:", designer.gatePointTargetValue);
+
+            if (targetValue != designer.gatePointTargetValue)
+            {
+                designer.gatePointTargetValue = targetValue;
+                EditorUtility.SetDirty(designer);
+            }
+
+            if (GUILayout.Button("Add Gate Point"))
+            {
+                AddGatePoint();
+                return;
+            }
+
+            if (GUILayout.Button("Delete Last Gate Point"))
+            {
+                DeleteLastGatePoint();
+                return;
+            }
+        }
+
+        private void AddGatePoint() 
+        {
+            GatePointLevelInfoModel infoModel = new GatePointLevelInfoModel();
+            infoModel.z = designer.LastPlatformZ;
+            infoModel.targetValue = designer.gatePointTargetValue;
+
+            LevelMngr.AddGatePoint(infoModel);
+
+            designer.UpdateLastPlatformPosition(LevelDesigner.GATE_POINT_LENGTH);
+            designer.UpdatePlatformIndicatorPosition();
+        }
+
+        private void DeleteLastGatePoint() 
+        {
+            LevelMngr.RemoveLastGatePoint();
+
+            designer.UpdateLastPlatformPosition(-LevelDesigner.GATE_POINT_LENGTH);
+            designer.UpdatePlatformIndicatorPosition();
+        }
+
+        #endregion
     }
 }

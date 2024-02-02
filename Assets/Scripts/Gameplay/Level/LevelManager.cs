@@ -3,6 +3,7 @@ using Common;
 using User;
 using Newtonsoft.Json;
 using UnityEditor;
+using Boo.Lang;
 
 namespace Gameplay
 {
@@ -26,10 +27,8 @@ namespace Gameplay
         private int totalLevelCount = 0;
 
         [SerializeField] LevelPlatformController platformController = null;
-        public LevelPlatformController PlatformController => platformController;
 
         [SerializeField] LevelGatePointController gatePointController = null;
-        public LevelGatePointController GatePointController => gatePointController;
 
         //public LevelSaveModel levelDataModel = null;
 
@@ -59,6 +58,12 @@ namespace Gameplay
             gatePointController.OnLevelLoad(CurrentSaveModel.gatePointSaveModel);
         }
 
+        public void UnloadLevel() 
+        {
+            platformController.UnloadLevel();
+            gatePointController.UnloadLevel();
+        }
+
         public LevelSaveModel GetLevelSaveModelFromResources(int levelNo, bool isCreateLevelCheck = false) 
         {
             LevelSaveModelSO saveModelSO = (LevelSaveModelSO)Resources.Load(GetLevelDataPath(levelNo));
@@ -79,8 +84,13 @@ namespace Gameplay
 
         public string SetChangesAndGetSaveModelJson() 
         {
+            //Platform
             CurrentSaveModel.platformSaveModel.infosJson = LevelDesigner.Instance.GetPlatformInfoJsonFromScene();
             CurrentSaveModel.platformSaveModelJson = JsonConvert.SerializeObject(CurrentSaveModel.platformSaveModel);
+
+            //GatePoint
+            CurrentSaveModel.gatePointSaveModel.infosJson = LevelDesigner.Instance.GetGatePointInfoJsonFromScene();
+            CurrentSaveModel.gatePointSaveModelJson = JsonConvert.SerializeObject(CurrentSaveModel.gatePointSaveModel);
 
             string modelString = JsonConvert.SerializeObject(CurrentSaveModel
                 , Formatting.None
@@ -112,6 +122,34 @@ namespace Gameplay
         {
             return LEVEL_FILE_ROOTH_PATH + GetLevelDataPath(levelNo) + ".asset";
         }
+
+        #region Platform
+
+        public void AddPlatform(PlatformLevelInfoModel infoModel) 
+        {
+            platformController.AddItem(infoModel);
+        }
+
+        public void RemoveLastPlatform() 
+        {
+            platformController.RemoveLastItem();
+        }
+
+        #endregion
+
+        #region Gate Point
+
+        public void AddGatePoint(GatePointLevelInfoModel infoModel) 
+        {
+            gatePointController.AddItem(infoModel);
+        }
+
+        public void RemoveLastGatePoint() 
+        {
+            gatePointController.RemoveLastItem();
+        }
+
+        #endregion
 
         private string GetLevelDataPath(int levelNo) 
         {
