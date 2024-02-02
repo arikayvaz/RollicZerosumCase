@@ -14,24 +14,27 @@ namespace Gameplay
         [SerializeField] GameObject goPlatform = null;
         [SerializeField] Transform trLeftGate = null;
         [SerializeField] Transform trRightGate = null;
+        [SerializeField] GameObject[] goWalls = null;
+        [SerializeField] Collider colliderEnterance = null;
 
         [Space]
         [SerializeField] int targetRegisterCount = 0;
 
-        private Action<bool> _onOperationComplete = null;
+        private Action<bool, bool> onOperationComplete = null;
 
-        private bool _canRegisterItems = false;
+        private bool canRegisterItems = false;
         private int registeredItemCount = 0;
+        private bool isLastGate = false;
 
         private List<CollectibleItem> collectedItems = new List<CollectibleItem>();
 
-        public void InitController(int targetValue) 
+        public void InitController(int targetRegisterCount, bool isLastGate) 
         {
-            targetRegisterCount = targetValue;
-        }
+            this.targetRegisterCount = targetRegisterCount;
+            this.isLastGate = isLastGate;
 
-        private void Awake()
-        {
+            colliderEnterance.enabled = true;
+
             goPlatform.SetActive(false);
             UpdateUI();
         }
@@ -41,11 +44,12 @@ namespace Gameplay
             CollectItem(other.gameObject);
         }
 
-        public void StartGateOperation(Action<bool> onOperationComplete) 
+        public void StartGateOperation(Action<bool, bool> onOperationComplete) 
         {
-            _onOperationComplete = onOperationComplete;
+            this.onOperationComplete = onOperationComplete;
 
-            _canRegisterItems = true;
+            colliderEnterance.enabled = false;
+            canRegisterItems = true;
 
             StartCoroutine(StartGateSequence());
         }
@@ -61,14 +65,14 @@ namespace Gameplay
         {
             yield return new WaitForSeconds(WAIT_TIME);
 
-            _canRegisterItems = false;
+            canRegisterItems = false;
 
             DestroyCollectibles();
 
             if (registeredItemCount >= targetRegisterCount) //success
                 StartSuccessSequence();
             else //fail
-                _onOperationComplete.Invoke(false);
+                onOperationComplete.Invoke(false, isLastGate);
 
         }
 
@@ -80,10 +84,20 @@ namespace Gameplay
             goPlatform.SetActive(true);
             textRegisteredCount.gameObject.SetActive(false);
 
-            trLeftGate.DORotate(new Vector3(0f, 0f, GATE_ROT_Z), ANIM_TIME);
-            trRightGate.DORotate(new Vector3(0f, 0f, -GATE_ROT_Z), ANIM_TIME);
+            if (!isLastGate)
+            {
+                trLeftGate.DORotate(new Vector3(0f, 0f, GATE_ROT_Z), ANIM_TIME);
+                trRightGate.DORotate(new Vector3(0f, 0f, -GATE_ROT_Z), ANIM_TIME);
+            }
 
-            goPlatform.transform.DOMoveY(0f, ANIM_TIME).OnComplete(() => _onOperationComplete.Invoke(true));
+            goPlatform.transform.DOMoveY(0f, ANIM_TIME).OnComplete(() => { 
+                onOperationComplete.Invoke(true, isLastGate);
+
+                foreach (GameObject wall in goWalls)
+                {
+                    wall.gameObject.SetActive(false);
+                }
+            });
         }
 
         private void CollectItem(GameObject goCollided) 
@@ -95,7 +109,7 @@ namespace Gameplay
 
             collectedItems.Add(item);
 
-            if (_canRegisterItems)
+            if (canRegisterItems)
                 RegisterItem();
         }
 

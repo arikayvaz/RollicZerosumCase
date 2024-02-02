@@ -63,7 +63,7 @@ namespace Gameplay
 
         private GameObject SpawnPlatform(Vector3 position) 
         {
-            GameObject platform = pooler.GetGo(pooler.transform);
+            GameObject platform = pooler.GetGo(null);
 
             platform.gameObject.SetActive(true);
             platform.transform.position = position;

@@ -98,7 +98,7 @@ namespace Gameplay
             if (pooler == null)
                 return null;
 
-            CollectibleItem item = pooler.GetGo<CollectibleItem>(pooler.transform);
+            CollectibleItem item = pooler.GetGo<CollectibleItem>();
 
             item.gameObject.SetActive(true);
             item.transform.position = position;

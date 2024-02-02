@@ -32,6 +32,16 @@ namespace Gameplay
             StartGame();
         }
 
+        public void OnGameSuccess() 
+        {
+
+        }
+
+        public void OnGameFail() 
+        {
+
+        }
+
         private void InitStateMachine() 
         {
             _stateMachine = gameObject.AddComponent<StateMachine>();

@@ -24,16 +24,16 @@ namespace Gameplay.PlayerStateMachine
             FreezeRigidbody(info);
 
             info.collectionController.PushCollectibles();
-            info.currentGatePoint.StartGateOperation((success) => OnGateOperationComplete(success, info));
+            info.currentGatePoint.StartGateOperation((success, isLastGate) => OnGateOperationComplete(success, isLastGate, info));
         }
 
-        private void OnGateOperationComplete(bool isSuccess, StateInfo info) 
+        private void OnGateOperationComplete(bool isSuccess, bool isLastGate, StateInfo info) 
         {
             info.currentGatePoint = null;
             ResetRigidbody(info);
 
             if (isSuccess)
-                OnGateSuccess();
+                OnGateSuccess(isLastGate);
             else
                 OnGateFail();
         }
@@ -49,14 +49,24 @@ namespace Gameplay.PlayerStateMachine
             info.rb.constraints = rigidbodyConstraints;
         }
 
-        private void OnGateSuccess() 
+        private void OnGateSuccess(bool isLastGate) 
         {
-            Debug.Log("Operation Succeed!");
+            Debug.Log("Operation Succeed!: " + isLastGate);
+
+            if (isLastGate)
+            {
+                GameManager.Instance.OnGameSuccess();
+                return;
+            }
+
+            stateMachine.ChangeState(StateIds.Move);
         }
 
         private void OnGateFail() 
         {
             Debug.Log("Operation Failed!");
+
+            GameManager.Instance.OnGameFail();
         }
     }
 }

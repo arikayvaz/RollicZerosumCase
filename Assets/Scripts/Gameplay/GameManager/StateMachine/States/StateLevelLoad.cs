@@ -13,6 +13,8 @@ namespace Gameplay.GameManagerStateMachine
         {
             base.OnEnter(info);
 
+            LevelManager.Instance.OnLevelLoad();
+
             PlayerController.Instance.InitPlayer();
         }
     }

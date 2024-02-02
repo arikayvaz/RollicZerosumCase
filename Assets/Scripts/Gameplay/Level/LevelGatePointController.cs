@@ -36,15 +36,20 @@ namespace Gameplay
             if (levelInfos == null || levelInfos.Length < 1)
                 return;
 
-            foreach (GatePointLevelInfoModel info in levelInfos)
+            for (int i = 0; i < levelInfos.Length; i++)
             {
-                AddItem(info);
+                AddGatePoint(levelInfos[i], i == levelInfos.Length - 1);
             }
         }
 
-        public void AddItem(GatePointLevelInfoModel infoModel) 
+        public void AddItem(GatePointLevelInfoModel levelInfo) 
         {
-            GatePointController gatePoint = SpawnGatePoint(infoModel.Position, infoModel.targetValue);
+            AddGatePoint(levelInfo, false);
+        }
+
+        public void AddGatePoint(GatePointLevelInfoModel infoModel, bool isLastGate) 
+        {
+            GatePointController gatePoint = SpawnGatePoint(infoModel.Position, infoModel.targetValue, isLastGate);
             gatePoints.Add(gatePoint);
         }
 
@@ -59,14 +64,14 @@ namespace Gameplay
             DestroyImmediate(lastGatePoint.gameObject);
         }
 
-        public GatePointController SpawnGatePoint(Vector3 position, int targetValue) 
+        public GatePointController SpawnGatePoint(Vector3 position, int targetValue, bool isLastGate) 
         {
-            GatePointController gatePoint = pooler.GetGo<GatePointController>(pooler.transform);
+            GatePointController gatePoint = pooler.GetGo<GatePointController>();
 
             gatePoint.gameObject.SetActive(true);
             gatePoint.transform.position = position;
 
-            gatePoint.InitController(targetValue);
+            gatePoint.InitController(targetValue, isLastGate);
 
             return gatePoint;
         }

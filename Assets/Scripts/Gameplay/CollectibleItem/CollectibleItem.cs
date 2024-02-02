@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using UnityEngine;
 
 namespace Gameplay
 {
@@ -29,9 +30,7 @@ namespace Gameplay
         const float FORCE_POWER = 450f;
         public void Push() 
         {
-            Vector3 force = Vector3.forward * FORCE_POWER * _rb.mass;
-
-            _rb.AddForce(force);
+            _rb.DOMoveZ(transform.position.z + 4f, 1f);
         }
     }
 }

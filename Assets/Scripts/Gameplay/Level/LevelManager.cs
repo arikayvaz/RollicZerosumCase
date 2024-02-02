@@ -42,6 +42,13 @@ namespace Gameplay
             Instance = instance;
         }
 
+        public void OnLevelLoad() 
+        {
+            SetTotalLevelCount();
+            int levelNo = GetLevelNo();
+            LoadLevel(levelNo);
+        }
+
         public void LoadLevel(int levelNo) 
         {
             CurrentSaveModel = GetLevelSaveModelFromResources(levelNo);
@@ -219,6 +226,12 @@ namespace Gameplay
                 return userLevelNo;
 
             return Random.Range(0, totalLevelCount);
+        }
+
+        private void SetTotalLevelCount() 
+        {
+            totalLevelCount = AssetDatabase.FindAssets($"t:{typeof(LevelSaveModelSO)}").Length;
+            Debug.Log(totalLevelCount);
         }
 
     }

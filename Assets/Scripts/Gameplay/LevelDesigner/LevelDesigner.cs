@@ -69,6 +69,8 @@ namespace Gameplay
                 infos[i] = info;
             }
 
+            infos = infos.OrderBy(x => x.z).ToArray();
+
             string json = JsonConvert.SerializeObject(infos);
 
             return json == null ? "" : json;
@@ -89,6 +91,8 @@ namespace Gameplay
                 infos[i] = info;
             }
 
+            infos = infos.OrderBy(x => x.z).ToArray();
+
             string json = JsonConvert.SerializeObject(infos);
 
             return json == null ? "" : json;
@@ -107,6 +111,8 @@ namespace Gameplay
             {
                 infos[i] = items[i].GetInfoModel();
             }
+
+            infos = infos.OrderBy(x => x.z).ToArray();
 
             string json = JsonConvert.SerializeObject(infos);
 
