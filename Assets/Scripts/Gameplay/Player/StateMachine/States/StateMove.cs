@@ -46,7 +46,8 @@ namespace Gameplay.PlayerStateMachine
             float adjustedX = Mathf.Clamp(inputX, -moveXLimit, moveXLimit);
 
             Vector3 pos = info.rb.position;
-            pos.x = adjustedX;
+
+            pos.x = Mathf.Lerp(pos.x, adjustedX, info.MoveSpeed * Time.deltaTime);
             pos.z += info.MoveSpeed * Time.deltaTime;
 
             info.rb.position = pos;
