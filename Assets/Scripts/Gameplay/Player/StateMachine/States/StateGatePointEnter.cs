@@ -55,7 +55,7 @@ namespace Gameplay.PlayerStateMachine
 
             if (isLastGate)
             {
-                GameManager.Instance.OnGameSuccess();
+                GameManager.Instance.OnLevelSuccess();
                 return;
             }
 
@@ -66,7 +66,7 @@ namespace Gameplay.PlayerStateMachine
         {
             Debug.Log("Operation Failed!");
 
-            GameManager.Instance.OnGameFail();
+            GameManager.Instance.OnLevelFail();
         }
     }
 }

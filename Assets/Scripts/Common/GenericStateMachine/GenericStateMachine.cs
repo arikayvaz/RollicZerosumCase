@@ -1,5 +1,6 @@
 namespace Common.GenericStateMachine
 {
+    using System;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -7,6 +8,8 @@ namespace Common.GenericStateMachine
         where TStateIds : System.Enum
         where TStateInfo : GenericStateInfo
     {
+        public Action<TStateIds> OnStateChanged;
+
         private Dictionary<TStateIds, GenericStateBase<TStateIds, TStateInfo>> dictStates = null;
 
         public GenericStateBase<TStateIds, TStateInfo> State => state;
@@ -55,6 +58,8 @@ namespace Common.GenericStateMachine
             state = stateNew;
 
             isChangeStateLocked = false;
+
+            OnStateChanged?.Invoke(state.StateId);
 
             if (changeStateIds.Count > 0)
             {

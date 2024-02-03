@@ -10,12 +10,12 @@ namespace Gameplay
         [SerializeField] private GameSettingsSO _gameSettings = null;
 
 
-        private StateMachine _stateMachine;
-        private StateFactory _stateFactory;
+        private StateMachine stateMachine;
+        private StateFactory stateFactory;
 
         public static GameSettingsSO GameSettings => Instance?._gameSettings;
 
-        public StateIds CurrentState => _stateMachine?.State?.StateId ?? StateIds.None;
+        public StateIds CurrentState => stateMachine?.State?.StateId ?? StateIds.None;
         public bool IsStartScreen => CurrentState == StateIds.TapToStart;
         public bool IsGameScreen => CurrentState == StateIds.Game;
 
@@ -29,37 +29,72 @@ namespace Gameplay
         private void Start()
         {
             LoadLevel();
-            StartGame();
+            StartLevel();
         }
 
-        public void OnGameSuccess() 
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
 
+            stateMachine.OnStateChanged -= OnGameStateChanged;
         }
 
-        public void OnGameFail() 
+        public void OnLevelSuccess() 
         {
+            ChangeState(StateIds.LevelSuccess);
+        }
 
+        public void OnLevelFail() 
+        {
+            ChangeState(StateIds.LevelFail);
+        }
+
+        public void OnBtnLevelSuccessClicked()
+        {
+            if (CurrentState != StateIds.LevelSuccess)
+                return;
+
+            ChangeState(StateIds.StartNextLevel);
+        }
+
+        public void OnBtnLevelFailClicked() 
+        {
+            if (CurrentState != StateIds.LevelFail)
+                return;
+
+            ChangeState(StateIds.RestartLevel);
         }
 
         private void InitStateMachine() 
         {
-            _stateMachine = gameObject.AddComponent<StateMachine>();
-            _stateFactory = new StateFactory();
+            stateMachine = gameObject.AddComponent<StateMachine>();
+            stateFactory = new StateFactory();
 
-            _stateMachine.InitStateMachine(_stateInfo, _stateFactory.GetStates(_stateMachine));
+            stateMachine.InitStateMachine(_stateInfo, stateFactory.GetStates(stateMachine));
 
-            _stateMachine.ChangeState(StateIds.None);
+            stateMachine.OnStateChanged += OnGameStateChanged;
+
+            ChangeState(StateIds.None);
+        }
+
+        private void ChangeState(StateIds newState) 
+        {
+            stateMachine.ChangeState(newState);
+        }
+
+        private void OnGameStateChanged(StateIds newState) 
+        {
+            UIController.Instance?.OnGameStateChanged(newState);
         }
 
         private void LoadLevel() 
         {
-            _stateMachine.ChangeState(StateIds.LevelLoad);
+            ChangeState(StateIds.LevelLoad);
         }
 
-        private void StartGame() 
+        private void StartLevel() 
         {
-            _stateMachine.ChangeState(StateIds.TapToStart);
+            ChangeState(StateIds.TapToStart);
         }
     }
 }

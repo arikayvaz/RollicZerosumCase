@@ -1,5 +1,6 @@
 ﻿using Common.GenericStateMachine;
 using UnityEngine;
+using User;
 
 namespace Gameplay.GameManagerStateMachine
 {
@@ -13,7 +14,11 @@ namespace Gameplay.GameManagerStateMachine
         {
             base.OnEnter(info);
 
+            UserManager.Instance.LoadUserSave();
+
             LevelManager.Instance.OnLevelLoad();
+
+            UIController.Instance.InitController();
 
             PlayerController.Instance.InitPlayer();
         }
