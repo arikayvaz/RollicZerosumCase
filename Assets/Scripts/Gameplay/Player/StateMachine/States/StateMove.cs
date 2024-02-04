@@ -32,7 +32,7 @@ namespace Gameplay.PlayerStateMachine
 
         private void AdjustMoveXLimit(StateInfo info) 
         {
-            float roadHalfWidth = GameManager.GameSettings.roadHalfWidth;
+            float roadHalfWidth = GameManager.LevelSettings.roadHalfWidth;
             moveXLimit = roadHalfWidth - info.PlayerHalfSize;
 
             if (moveXLimit < 0f)

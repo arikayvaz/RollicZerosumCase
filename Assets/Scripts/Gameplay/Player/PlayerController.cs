@@ -3,6 +3,7 @@ using Common;
 using Gameplay.PlayerStateMachine;
 using Gameplay;
 
+[SelectionBase]
 public class PlayerController : Singleton<PlayerController>
 {
     [SerializeField] StateInfo _stateInfo = new StateInfo();

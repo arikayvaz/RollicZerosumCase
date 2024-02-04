@@ -21,6 +21,8 @@ namespace Gameplay.GameManagerStateMachine
             UIController.Instance.InitController();
 
             PlayerController.Instance.InitPlayer();
+
+            GameCameraController.Instance.InitController(PlayerController.Instance.transform);
         }
     }
 }

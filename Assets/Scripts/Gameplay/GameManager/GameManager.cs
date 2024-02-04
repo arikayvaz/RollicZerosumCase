@@ -6,14 +6,16 @@ namespace Gameplay
 {
     public class GameManager : Singleton<GameManager>
     {
-        [SerializeField] private StateInfo _stateInfo = new StateInfo();
-        [SerializeField] private GameSettingsSO _gameSettings = null;
+        [SerializeField] StateInfo stateInfo = new StateInfo();
+        [SerializeField] GameSettingsSO gameSettings = null;
+        [SerializeField] LevelSettingsSO levelSettings = null;
 
 
         private StateMachine stateMachine;
         private StateFactory stateFactory;
 
-        public static GameSettingsSO GameSettings => Instance?._gameSettings;
+        public static GameSettingsSO GameSettings => Instance?.gameSettings;
+        public static LevelSettingsSO LevelSettings => Instance?.levelSettings;
 
         public StateIds CurrentState => stateMachine?.State?.StateId ?? StateIds.None;
         public bool IsStartScreen => CurrentState == StateIds.TapToStart;
@@ -70,7 +72,7 @@ namespace Gameplay
             stateMachine = gameObject.AddComponent<StateMachine>();
             stateFactory = new StateFactory();
 
-            stateMachine.InitStateMachine(_stateInfo, stateFactory.GetStates(stateMachine));
+            stateMachine.InitStateMachine(stateInfo, stateFactory.GetStates(stateMachine));
 
             stateMachine.OnStateChanged += OnGameStateChanged;
 

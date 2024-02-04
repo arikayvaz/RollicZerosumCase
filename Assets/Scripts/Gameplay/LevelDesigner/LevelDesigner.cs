@@ -26,22 +26,21 @@ namespace Gameplay
 #else
     public static bool IsDesignMode => false;
 #endif
+        [SerializeField] LevelSettingsSO levelSettings = null;
+        public LevelSettingsSO LevelSettings => levelSettings;
 
+        [Space]
         [SerializeField] Transform trPlatformIndicator = null;
         [SerializeField] Transform trCollectibleIndicator = null;
 
         [HideInInspector] public int levelNo = 0;
-        [HideInInspector] public int gatePointTargetValue = 0;
-        [HideInInspector] public CollectibleItemTypes collectibleItemType = CollectibleItemTypes.None;
-        [HideInInspector] public int collectibleAddCount = 0;
-        [HideInInspector] public int collectibleDeleteCount = 0;
+        [HideInInspector][NonSerialized] public int gatePointTargetValue = 0;
+        [HideInInspector][NonSerialized] public CollectibleItemTypes collectibleItemType = CollectibleItemTypes.None;
+        [HideInInspector][NonSerialized] public int collectibleAddCount = 0;
+        [HideInInspector][NonSerialized] public int collectibleDeleteCount = 0;
 
         public float LastPlatformZ { get; private set; } = 0f;
 
-        //TODO: Get values from game settings
-        public const float PLATFORM_LENGTH = 20f;
-        public const float GATE_POINT_LENGTH = 8f;
-        public const float COLLECTIBLE_ITEM_SIZE = 0.3f;
         public const float COLLECTIBLE_ITEM_GAP = 0.4f;
 
         public static void SetEditorInstance(LevelDesigner instance) 
@@ -147,7 +146,7 @@ namespace Gameplay
 
             bool isLastObjectPlatform = goLastObject.CompareTag("Platform");
 
-            UpdateLastPlatformPosition(isLastObjectPlatform ? PLATFORM_LENGTH : GATE_POINT_LENGTH);
+            UpdateLastPlatformPosition(isLastObjectPlatform ? levelSettings.platformLength : levelSettings.gatePointLength);
         }
 
         public void CalculateLastCollectiblePosition() 
@@ -163,7 +162,7 @@ namespace Gameplay
             goItems = goItems.OrderBy(x => x.transform.position.z).ToArray();
 
             Vector3 pos = goItems[goItems.Length - 1].transform.position;
-            pos.z += COLLECTIBLE_ITEM_SIZE * 2f + COLLECTIBLE_ITEM_GAP;
+            pos.z += levelSettings.collectibleItemSize * 2f + COLLECTIBLE_ITEM_GAP;
 
             SetCollectibItemIndicatorPosition(pos);
         }

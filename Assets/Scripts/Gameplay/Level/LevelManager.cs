@@ -31,6 +31,7 @@ namespace Gameplay
         [SerializeField] LevelCollectibleItemController collectibleItemController = null;
 
         public LevelSaveModel CurrentSaveModel { get; private set; } = null;
+        public bool IsLevelLoaded => CurrentSaveModel != null;
 
         public bool HasAnyCollectibleInLevel => collectibleItemController.HasAnyCollectible;
 

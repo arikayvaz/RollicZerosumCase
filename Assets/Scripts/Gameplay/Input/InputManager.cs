@@ -140,7 +140,7 @@ namespace Gameplay
 
         private void UpdateTargetX(float x) 
         {
-            float roadHalfWidth = GameManager.GameSettings.roadHalfWidth;
+            float roadHalfWidth = GameManager.LevelSettings.roadHalfWidth;
 
             if (Mathf.Abs(x - _startX) > 0.01f)
             {

@@ -112,6 +112,8 @@ namespace Gameplay
             EditorUtility.SetDirty(designer);
             EditorUtility.SetDirty(LevelMngr);
 
+            LoadLevel();
+
             Debug.Log("Level Created");
         }
 
@@ -190,7 +192,7 @@ namespace Gameplay
 
             LevelMngr.AddPlatform(infoModel);
 
-            designer.UpdateLastPlatformPosition(LevelDesigner.PLATFORM_LENGTH);
+            designer.UpdateLastPlatformPosition(designer.LevelSettings.platformLength);
             designer.UpdatePlatformIndicatorPosition();
         }
 
@@ -198,7 +200,7 @@ namespace Gameplay
         {
             LevelMngr.RemoveLastPlatform();
 
-            designer.UpdateLastPlatformPosition(-LevelDesigner.PLATFORM_LENGTH);
+            designer.UpdateLastPlatformPosition(-designer.LevelSettings.platformLength);
             designer.UpdatePlatformIndicatorPosition();
         }
 
@@ -244,7 +246,7 @@ namespace Gameplay
 
             LevelMngr.AddGatePoint(infoModel);
 
-            designer.UpdateLastPlatformPosition(LevelDesigner.GATE_POINT_LENGTH);
+            designer.UpdateLastPlatformPosition(designer.LevelSettings.gatePointLength);
             designer.UpdatePlatformIndicatorPosition();
         }
 
@@ -252,7 +254,7 @@ namespace Gameplay
         {
             LevelMngr.RemoveLastGatePoint();
 
-            designer.UpdateLastPlatformPosition(-LevelDesigner.GATE_POINT_LENGTH);
+            designer.UpdateLastPlatformPosition(-designer.LevelSettings.gatePointLength);
             designer.UpdatePlatformIndicatorPosition();
         }
 
@@ -285,7 +287,7 @@ namespace Gameplay
                 EditorUtility.SetDirty(designer);
             }
 
-            int deleteCount = EditorGUILayout.IntField("Add Count:", designer.collectibleDeleteCount);
+            int deleteCount = EditorGUILayout.IntField("Delete Count:", designer.collectibleDeleteCount);
 
             if (designer.collectibleDeleteCount != deleteCount)
             {

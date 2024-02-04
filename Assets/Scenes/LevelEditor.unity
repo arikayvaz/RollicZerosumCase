@@ -365,13 +365,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fd0f19cf4ae3fe47bbaa46da8fd4674, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelSettings: {fileID: 11400000, guid: bd0d6d2f13964d045ab063a8fcc071a5, type: 2}
   trPlatformIndicator: {fileID: 1844121789}
   trCollectibleIndicator: {fileID: 1419195203}
-  levelNo: 0
-  gatePointTargetValue: 10
-  collectibleItemType: 1
-  collectibleAddCount: 5
-  collectibleDeleteCount: 3
+  levelNo: 11
 --- !u!1001 &1929334286588413194
 PrefabInstance:
   m_ObjectHideFlags: 0

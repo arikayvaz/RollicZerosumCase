@@ -81,7 +81,7 @@ namespace Gameplay
             if (lastCollectibleItem != null)
                 position = GetLastCollectibleItemPosition();
 
-            position.z += LevelDesigner.COLLECTIBLE_ITEM_SIZE * 2f + LevelDesigner.COLLECTIBLE_ITEM_GAP;
+            position.z += LevelDesigner.Instance.LevelSettings.collectibleItemSize * 2f + LevelDesigner.COLLECTIBLE_ITEM_GAP;
 
             return position;
         }

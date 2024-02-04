@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace Gameplay
 {
+    [SelectionBase]
     public class GatePointController : MonoBehaviour
     {
         [SerializeField] TMP_Text textRegisteredCount = null;
@@ -16,6 +17,7 @@ namespace Gameplay
         [SerializeField] Transform trRightGate = null;
         [SerializeField] GameObject[] goWalls = null;
         [SerializeField] Collider colliderEnterance = null;
+        [SerializeField] Collider colliderItemBlocker = null;
 
         [Space]
         [SerializeField] int targetRegisterCount = 0;
@@ -34,6 +36,7 @@ namespace Gameplay
             this.isLastGate = isLastGate;
 
             colliderEnterance.enabled = true;
+            colliderItemBlocker.enabled = true;
 
             goPlatform.SetActive(false);
             UpdateUI();
@@ -68,6 +71,8 @@ namespace Gameplay
             canRegisterItems = false;
 
             DestroyCollectibles();
+
+            colliderItemBlocker.enabled = false;
 
             if (registeredItemCount >= targetRegisterCount) //success
                 StartSuccessSequence();
