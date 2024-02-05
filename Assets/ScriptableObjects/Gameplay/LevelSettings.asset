@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0dd31a8828ae214883e0dea7d24e628, type: 3}
   m_Name: LevelSettings
   m_EditorClassIdentifier: 
+  totalLevelCount: 12
   roadHalfWidth: 8
   platformLength: 20
   gatePointLength: 8

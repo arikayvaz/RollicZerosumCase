@@ -110,6 +110,8 @@ namespace LevelEditor
             AssetDatabase.CreateAsset(levelDataSO, LevelMngr.GetLevelSaveSOFileName(designer.levelNo));
             AssetDatabase.SaveAssets();
 
+            //UpdateTotalLevelCount();
+
             EditorUtility.SetDirty(designer);
             EditorUtility.SetDirty(LevelMngr);
 
@@ -161,6 +163,23 @@ namespace LevelEditor
             designer.ResetPlatformIndicatorPosition();
             designer.ResetCollectibleItemIndicatorPosition();
         }
+
+        /*
+        private void UpdateTotalLevelCount() 
+        {
+            const string LEVEL_SETTINGS_PATH = "Assets/ScriptableObjects/Gameplay/LevelSettings.asset";
+            AssetDatabase.Refresh();
+
+            LevelSettingsSO levelSettingsSO = CreateInstance<LevelSettingsSO>();
+
+            int totalLevelCount = AssetDatabase.FindAssets($"t:{typeof(LevelSaveModelSO)}").Length;
+
+            levelSettingsSO.totalLevelCount = totalLevelCount;
+
+            AssetDatabase.CreateAsset(levelSettingsSO, LEVEL_SETTINGS_PATH);
+            AssetDatabase.SaveAssets();
+        }
+        */
 
         #region Platform
 

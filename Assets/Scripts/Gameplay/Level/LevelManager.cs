@@ -25,8 +25,9 @@ namespace Gameplay
         public static bool IsDebugMode => Instance?.debugMode ?? false;
         public static int DebugLevelNo => Instance?.debugLevelNo ?? 0;
 
-        private int totalLevelCount = 0;
+        [SerializeField] LevelSettingsSO levelSettings = null;
 
+        [Space]
         [SerializeField] LevelPlatformController platformController = null;
         [SerializeField] LevelGatePointController gatePointController = null;
         [SerializeField] LevelCollectibleItemController collectibleItemController = null;
@@ -35,6 +36,8 @@ namespace Gameplay
         public bool IsLevelLoaded => CurrentSaveModel != null;
 
         public bool HasAnyCollectibleInLevel => collectibleItemController.HasAnyCollectible;
+
+        public int TotalLevelCount => levelSettings?.totalLevelCount ?? 0;
 
         public static void SetEditorInstance(LevelManager instance)
         {
@@ -46,7 +49,7 @@ namespace Gameplay
 
         public int OnLevelLoad() 
         {
-            SetTotalLevelCount();
+            //SetTotalLevelCount();
             int levelNo = GetLevelNo();
             LoadLevel(levelNo);
 
@@ -222,23 +225,24 @@ namespace Gameplay
         private int GetLevelNo() 
         {
             if (IsDebugMode)
-                return Mathf.Min(DebugLevelNo, totalLevelCount - 1);
+                return Mathf.Min(DebugLevelNo, TotalLevelCount - 1);
 
             int userLevelNo = UserManager.Instance.UserLevelNo;
 
-            if (userLevelNo < totalLevelCount)
+            if (userLevelNo < TotalLevelCount)
                 return userLevelNo;
 
             if (UserManager.Instance.LastPlayedLevelNo >= 0)
                 return UserManager.Instance.LastPlayedLevelNo;
 
-            return Random.Range(0, totalLevelCount);
+            return Random.Range(0, TotalLevelCount);
         }
 
+        /*
         private void SetTotalLevelCount() 
         {
             totalLevelCount = AssetDatabase.FindAssets($"t:{typeof(LevelSaveModelSO)}").Length;
         }
-
+        */
     }
 }

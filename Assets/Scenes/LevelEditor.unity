@@ -368,7 +368,7 @@ MonoBehaviour:
   levelSettings: {fileID: 11400000, guid: bd0d6d2f13964d045ab063a8fcc071a5, type: 2}
   trPlatformIndicator: {fileID: 1844121789}
   trCollectibleIndicator: {fileID: 1419195203}
-  levelNo: 11
+  levelNo: 9
 --- !u!1001 &1929334286588413194
 PrefabInstance:
   m_ObjectHideFlags: 0
