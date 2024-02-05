@@ -45,8 +45,6 @@ namespace Gameplay
                 return;
 
             collectedItems.Add(item);
-            item.OnAdded();
-            Debug.Log("Added Item");
         }
 
         private void RemoveItemFromCollection(CollectibleItem item) 
@@ -55,8 +53,6 @@ namespace Gameplay
                 return;
 
             collectedItems.Remove(item);
-            item.OnRemoved();
-            Debug.Log("Removed Item");
         }
 
         public void PushCollectibles() 

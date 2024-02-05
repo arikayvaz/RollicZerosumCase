@@ -232,7 +232,6 @@ namespace Gameplay
         private void SetTotalLevelCount() 
         {
             totalLevelCount = AssetDatabase.FindAssets($"t:{typeof(LevelSaveModelSO)}").Length;
-            Debug.Log(totalLevelCount);
         }
 
     }

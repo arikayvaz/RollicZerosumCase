@@ -164,6 +164,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 189686781}
     m_Modifications:
+    - target: {fileID: 1929334286221226412, guid: 798910cb5c8550f48a4e303353c3c1fe,
+        type: 3}
+      propertyPath: debugMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1929334286221226413, guid: 798910cb5c8550f48a4e303353c3c1fe,
         type: 3}
       propertyPath: m_RootOrder
@@ -413,8 +418,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.24192187, y: -0, z: -0, w: 0.9702957}
-  m_LocalPosition: {x: 0, y: 18, z: -12}
+  m_LocalRotation: {x: 0.38268343, y: -0, z: -0, w: 0.92387956}
+  m_LocalPosition: {x: 0, y: 22.5, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1202056147}
@@ -919,6 +924,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GameCameraController
+      objectReference: {fileID: 0}
+    - target: {fileID: 6573791565142888809, guid: 2cb35cc4689176c4aaac7afc0c3bb227,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 22.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6573791565142888809, guid: 2cb35cc4689176c4aaac7afc0c3bb227,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6573791565142888809, guid: 2cb35cc4689176c4aaac7afc0c3bb227,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6573791565142888809, guid: 2cb35cc4689176c4aaac7afc0c3bb227,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6573791565142888822, guid: 2cb35cc4689176c4aaac7afc0c3bb227,
         type: 3}
