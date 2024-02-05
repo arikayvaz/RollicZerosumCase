@@ -9,6 +9,7 @@ namespace User
         public bool IsInitialized { get; private set; } = false;
 
         public int UserLevelNo => saveManager.UserLevelNo;
+        public int LastPlayedLevelNo => saveManager.LastPlayerLevelNo;
 
         public void InitManager() 
         {
@@ -30,6 +31,16 @@ namespace User
         public void DeleteAllUserSettings() 
         {
             saveManager.DeleteAllUserSettings();
+        }
+
+        public void ResetLastPlayedLevelNoAndSave()
+        {
+            saveManager.ResetLastPlayedLevelNoAndSave();
+        }
+
+        public void SetLastPlayedLevelNoAndSave(int levelNo)
+        {
+            saveManager.SetLastPlayedLevelNoAndSave(levelNo);
         }
     }
 }

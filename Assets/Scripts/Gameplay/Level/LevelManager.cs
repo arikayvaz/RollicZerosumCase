@@ -44,11 +44,13 @@ namespace Gameplay
             Instance = instance;
         }
 
-        public void OnLevelLoad() 
+        public int OnLevelLoad() 
         {
             SetTotalLevelCount();
             int levelNo = GetLevelNo();
             LoadLevel(levelNo);
+
+            return levelNo;
         }
 
         public void LoadLevel(int levelNo) 
@@ -226,6 +228,9 @@ namespace Gameplay
 
             if (userLevelNo < totalLevelCount)
                 return userLevelNo;
+
+            if (UserManager.Instance.LastPlayedLevelNo >= 0)
+                return UserManager.Instance.LastPlayedLevelNo;
 
             return Random.Range(0, totalLevelCount);
         }

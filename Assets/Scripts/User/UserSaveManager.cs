@@ -11,6 +11,7 @@ namespace User
         private UserSaveModel saveModel;
 
         public int UserLevelNo => saveModel.levelNo;
+        public int LastPlayerLevelNo => saveModel.lastPlayedLevelNo;
 
         public UserSaveManager()
         {
@@ -32,6 +33,21 @@ namespace User
         {
             ResetSave();
             PlayerPrefs.DeleteAll();
+            Save();
+        }
+
+        public void ResetLastPlayedLevelNoAndSave() 
+        {
+            saveModel.lastPlayedLevelNo = -1;
+            Save();
+        }
+
+        public void SetLastPlayedLevelNoAndSave(int levelNo)
+        {
+            if (levelNo == saveModel.lastPlayedLevelNo)
+                return;
+
+            saveModel.lastPlayedLevelNo = levelNo;
             Save();
         }
 

@@ -18,7 +18,9 @@ namespace Gameplay.GameManagerStateMachine
 
             UserManager.Instance.LoadUserSave();
 
-            LevelManager.Instance.OnLevelLoad();
+            int loadedLevelNo = LevelManager.Instance.OnLevelLoad();
+
+            UserManager.Instance.SetLastPlayedLevelNoAndSave(loadedLevelNo);
 
             UIController.Instance.InitController();
 
