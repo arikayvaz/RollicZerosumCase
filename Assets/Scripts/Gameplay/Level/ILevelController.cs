@@ -8,6 +8,6 @@
         void UnloadLevel();
         void SpawnItems(TLevelInfo[] levelInfos);
         void AddItem(TLevelInfo levelInfo);
-        void RemoveLastItem();
+        bool RemoveLastItem();
     }
 }

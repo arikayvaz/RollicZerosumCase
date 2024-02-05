@@ -4,6 +4,7 @@ using User;
 using Newtonsoft.Json;
 using UnityEditor;
 using Boo.Lang;
+using LevelEditor;
 
 namespace Gameplay
 {
@@ -152,9 +153,9 @@ namespace Gameplay
             platformController.AddItem(infoModel);
         }
 
-        public void RemoveLastPlatform() 
+        public bool RemoveLastPlatform() 
         {
-            platformController.RemoveLastItem();
+            return platformController.RemoveLastItem();
         }
 
         #endregion
@@ -166,9 +167,9 @@ namespace Gameplay
             gatePointController.AddItem(infoModel);
         }
 
-        public void RemoveLastGatePoint() 
+        public bool RemoveLastGatePoint() 
         {
-            gatePointController.RemoveLastItem();
+            return gatePointController.RemoveLastItem();
         }
 
         #endregion
@@ -180,9 +181,9 @@ namespace Gameplay
             collectibleItemController.AddItem(infoModel);
         }
 
-        public void RemoveCollectibleItem() 
+        public bool RemoveCollectibleItem() 
         {
-            collectibleItemController.RemoveLastItem();
+            return collectibleItemController.RemoveLastItem();
         }
 
         public Vector3 GetNextCollectibleItemPosition() 

@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using Newtonsoft.Json;
+using Gameplay;
 
-namespace Gameplay
+namespace LevelEditor
 {
     [CustomEditor(typeof(LevelDesigner))]
     public class LevelDesignerEditor : Editor
@@ -198,7 +199,10 @@ namespace Gameplay
 
         private void DeleteLastPlatform() 
         {
-            LevelMngr.RemoveLastPlatform();
+            bool isSuccess = LevelMngr.RemoveLastPlatform();
+
+            if (!isSuccess)
+                return;
 
             designer.UpdateLastPlatformPosition(-designer.LevelSettings.platformLength);
             designer.UpdatePlatformIndicatorPosition();
@@ -252,7 +256,10 @@ namespace Gameplay
 
         private void DeleteLastGatePoint() 
         {
-            LevelMngr.RemoveLastGatePoint();
+            bool isSuccess = LevelMngr.RemoveLastGatePoint();
+
+            if (!isSuccess)
+                return;
 
             designer.UpdateLastPlatformPosition(-designer.LevelSettings.gatePointLength);
             designer.UpdatePlatformIndicatorPosition();
@@ -341,17 +348,27 @@ namespace Gameplay
                 AddSingleCollectible();
         }
 
-        private void DeleteSingleCollectible() 
+        private bool DeleteSingleCollectible() 
         {
-            LevelMngr.RemoveCollectibleItem();
+            bool isSuccess = LevelMngr.RemoveCollectibleItem();
+
+            if (!isSuccess)
+                return false;
 
             designer.UpdateCollectibleIndicatorPosition();
+
+            return true;
         }
 
         private void DeleteMultipleCollectible(int count) 
         {
-            for (int i = 0; i < count; i++)
-                DeleteSingleCollectible();
+            for (int i = 0; i < count; i++) 
+            {
+                bool isSuccess = DeleteSingleCollectible();
+
+                if (!isSuccess)
+                    break;
+            }
         }
 
         #endregion

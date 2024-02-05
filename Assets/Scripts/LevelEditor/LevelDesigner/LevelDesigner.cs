@@ -4,8 +4,9 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 using UnityEngine;
+using Gameplay;
 
-namespace Gameplay
+namespace LevelEditor
 {
     public class LevelDesigner : Singleton<LevelDesigner>
     {

@@ -1,5 +1,6 @@
 ﻿using Boo.Lang;
 using Common;
+using LevelEditor;
 using System;
 using UnityEngine;
 
@@ -61,10 +62,10 @@ namespace Gameplay
             SetLastCollectibleItem();
         }
 
-        public void RemoveLastItem()
+        public bool RemoveLastItem()
         {
             if (Application.isPlaying || collectibleItems?.Count < 1)
-                return;
+                return false;
 
             CollectibleItem lastCollectibleItem = collectibleItems[collectibleItems.Count - 1];
 
@@ -72,6 +73,8 @@ namespace Gameplay
             DestroyImmediate(lastCollectibleItem.gameObject);
 
             SetLastCollectibleItem();
+
+            return true;
         }
 
         public Vector3 GetNextCollectibleItemPosition()

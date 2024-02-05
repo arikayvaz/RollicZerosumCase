@@ -50,15 +50,17 @@ namespace Gameplay
             platforms.Add(platform);
         }
 
-        public void RemoveLastItem() 
+        public bool RemoveLastItem() 
         {
             if (Application.isPlaying || platforms?.Count < 1)
-                return;
+                return false;
 
             GameObject goLastPlatform = platforms[platforms.Count - 1];
 
             platforms.Remove(goLastPlatform);
             DestroyImmediate(goLastPlatform);
+
+            return true;
         }
 
         private GameObject SpawnPlatform(Vector3 position) 

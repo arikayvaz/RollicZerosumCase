@@ -53,15 +53,17 @@ namespace Gameplay
             gatePoints.Add(gatePoint);
         }
 
-        public void RemoveLastItem() 
+        public bool RemoveLastItem() 
         {
             if (Application.isPlaying || gatePoints?.Count < 1)
-                return;
+                return false;
 
             GatePointController lastGatePoint = gatePoints[gatePoints.Count - 1];
 
             gatePoints.Remove(lastGatePoint);
             DestroyImmediate(lastGatePoint.gameObject);
+
+            return true;
         }
 
         public GatePointController SpawnGatePoint(Vector3 position, int targetValue, bool isLastGate) 
