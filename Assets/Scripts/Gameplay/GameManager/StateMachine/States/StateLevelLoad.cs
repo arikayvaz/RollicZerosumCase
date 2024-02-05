@@ -14,6 +14,8 @@ namespace Gameplay.GameManagerStateMachine
         {
             base.OnEnter(info);
 
+            UserManager.Instance.InitManager();
+
             UserManager.Instance.LoadUserSave();
 
             LevelManager.Instance.OnLevelLoad();
