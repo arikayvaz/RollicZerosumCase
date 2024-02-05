@@ -30,7 +30,7 @@ namespace User
 
         public void DeleteAllUserSettings() 
         {
-            Reset();
+            ResetSave();
             PlayerPrefs.DeleteAll();
             Save();
         }
@@ -49,7 +49,7 @@ namespace User
             PlayerPrefs.Save();
         }
 
-        private void Reset() 
+        private void ResetSave() 
         {
             saveModel = new UserSaveModel();
 

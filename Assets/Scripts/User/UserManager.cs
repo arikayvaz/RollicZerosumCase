@@ -6,13 +6,15 @@ namespace User
     {
         private UserSaveManager saveManager;
 
+        public bool IsInitialized { get; private set; } = false;
+
         public int UserLevelNo => saveManager.UserLevelNo;
 
-        protected override void Awake()
+        public void InitManager() 
         {
-            base.Awake();
-
             saveManager = new UserSaveManager();
+
+            IsInitialized = true;
         }
 
         public void IncreaseLevelNoAndSave() 
