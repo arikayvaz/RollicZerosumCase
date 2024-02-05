@@ -53,7 +53,7 @@ namespace Gameplay
 
         public void AddItem(CollectibleItemLevelInfoModel levelInfo)
         {
-            CollectibleItem item = SpawnItem(levelInfo.type, levelInfo.Position);
+            CollectibleItem item = SpawnItem(levelInfo.type, levelInfo.Position, levelInfo.Rotation);
 
             if (item == null)
                 return;
@@ -94,7 +94,7 @@ namespace Gameplay
             return lastCollectibleItem.transform.position;
         }
 
-        private CollectibleItem SpawnItem(CollectibleItemTypes itemType, Vector3 position)
+        private CollectibleItem SpawnItem(CollectibleItemTypes itemType, Vector3 position, Quaternion rotation)
         {
             Pooler pooler = GetPooler(itemType);
 
@@ -105,6 +105,7 @@ namespace Gameplay
 
             item.gameObject.SetActive(true);
             item.transform.position = position;
+            item.transform.rotation = rotation;
 
             return item;
         }

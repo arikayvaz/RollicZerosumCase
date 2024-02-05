@@ -12,7 +12,7 @@ namespace Gameplay
 
         public CollectibleItemLevelInfoModel GetInfoModel() 
         {
-            return new CollectibleItemLevelInfoModel(itemType, transform.position.x, transform.position.z);
+            return new CollectibleItemLevelInfoModel(itemType, transform.position, transform.rotation.eulerAngles);
         }
 
         const float FORCE_POWER = 60f;
